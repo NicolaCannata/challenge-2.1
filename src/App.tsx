@@ -1,20 +1,25 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { actionAddToList } from "./actions";
+import { selectorList } from "./selectors";
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  const myList = useSelector(selectorList) || [];
+
   const [query, setQuery] = useState("");
   const setTheQuery = (e: any) => setQuery(e.target.value);
 
-  const [list, addToMyList] = useState([]);
   const addOnList = () => {
-    //@ts-ignore
-    addToMyList([...list, query]);
+    dispatch(actionAddToList(query));
   };
 
   const [filteredQuery, setFilteredQuery] = useState([]);
   const handleFilteredSearch = (e: any) => setFilteredQuery(e.target.value);
 
-  const filteredArray = list.filter((list: any) =>
-    list.includes(filteredQuery)
+  const filteredArray = myList.filter((myList: any) =>
+    myList.includes(filteredQuery)
   );
 
   return (
@@ -38,9 +43,8 @@ const App = () => {
           value={filteredQuery}
         />
       </label>
-
       {filteredArray.map((filteredArray: any) => (
-        <ul>{filteredArray}</ul>
+        <div>{filteredArray}</div>
       ))}
     </div>
   );
